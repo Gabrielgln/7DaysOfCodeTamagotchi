@@ -9,13 +9,12 @@ var response = client.Execute(request, Method.Get);
 var pokemonSpecies = JsonConvert.DeserializeObject<PokemonSpecies>(response.Content);
 
 for (int i = 0; i < pokemonSpecies.Results.Count; i++){
-    Console.WriteLine($"{i+1} - {pokemonSpecies.Results[i].Name}");
+    Console.WriteLine($"{i+1}. {pokemonSpecies.Results[i].Name}");
 }
 
 int escolha;
 
 while(true){
-    Console.WriteLine("\n");
     Console.WriteLine("Escolha um número: ");
     bool result = int.TryParse(Console.ReadLine(), out escolha);
     if(!(result && escolha >= 1 && escolha <= pokemonSpecies.Results.Count)){
@@ -29,9 +28,15 @@ client = new RestClient($"https://pokeapi.co/api/v2/pokemon/{escolha}");
 request = new RestRequest("", Method.Get);
 response = client.Execute(request, Method.Get);
 
-if(response.StatusCode == System.Net.HttpStatusCode.OK){
-    Console.WriteLine(response.Content);
-}else{
-    Console.WriteLine(response.ErrorMessage);
+var pokemonDetails = JsonConvert.DeserializeObject<PokemonDetail>(response.Content);
+var pokemonSelected = pokemonSpecies.Results[escolha-1];
+pokemonDetails.Name = pokemonSelected.Name;
+
+Console.WriteLine($"Nome Pokemon: {pokemonDetails.Name}");
+Console.WriteLine($"Altura: {pokemonDetails.Height}");
+Console.WriteLine($"Peso: {pokemonDetails.Weight}");
+Console.WriteLine("Habilidades:");
+foreach(var abilityDetail in pokemonDetails.Abilities){
+    Console.WriteLine(abilityDetail.Ability.Name.ToUpper());
 }
 
