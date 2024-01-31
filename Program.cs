@@ -1,37 +1,56 @@
-﻿using Newtonsoft.Json;
-using RestSharp;
+﻿using TamagotchiApp;
 using TamagotchiApp.Models;
+using TamagotchiApp.Views;
 
-var client = new RestClient($"https://pokeapi.co/api/v2/pokemon-species/");
-var request = new RestRequest("", Method.Get);
-var response = client.Execute(request, Method.Get);
+Menu menu = new Menu();
+PokemonApiService pokemonApiService = new PokemonApiService();
+List<Pokemon> pokemons = pokemonApiService.ObterEspeciesDisponiveis();
+List<PokemonDetail> pokemonsAdotados = new List<PokemonDetail>();
 
-var pokemonSpecies = JsonConvert.DeserializeObject<PokemonSpecies>(response.Content);
-
-for (int i = 0; i < pokemonSpecies.Results.Count; i++){
-    Console.WriteLine($"{i+1} - {pokemonSpecies.Results[i].Name}");
-}
-
-int escolha;
-
+menu.MostrarMensagemDeBoasVindas();
 while(true){
-    Console.WriteLine("\n");
-    Console.WriteLine("Escolha um número: ");
-    bool result = int.TryParse(Console.ReadLine(), out escolha);
-    if(!(result && escolha >= 1 && escolha <= pokemonSpecies.Results.Count)){
-        Console.WriteLine("Escolha inválida. Tente novamente.");
-    }else{
-        break;
+    menu.MostrarMenuPrincipal();
+    int escolha = menu.ObterEscolhaDoJogador();
+    switch(escolha){
+        case 1:
+            menu.MostrarMenuDeAdocao(pokemons);
+            int indiceEspecie = menu.ObterEspecieEscolhida(pokemons);
+            while(true){
+                menu.MostrarMenuDeOpcoes(pokemons[indiceEspecie].Name);
+                escolha = menu.ObterEscolhaDoJogador();
+                switch(escolha){
+                    case 1:
+                        var pokemonDetail = pokemonApiService.ObterDetalhesDaEspecie(pokemons[indiceEspecie]);
+                        menu.MostrarDetalhesDaEspecie(pokemonDetail);
+                        break;
+                    case 2:
+                        pokemonDetail = pokemonApiService.ObterDetalhesDaEspecie(pokemons[indiceEspecie]);
+                        if(menu.ConfirmarAdocao()){
+                            pokemonsAdotados.Add(pokemonDetail);
+                            Console.WriteLine($"{menu.Name} Parabéns! Você adotou um {pokemonDetail.Name}!");
+                            Console.WriteLine("──────────────");
+                            Console.WriteLine("────▄████▄────");
+                            Console.WriteLine("──▄████████▄──");
+                            Console.WriteLine("──██████████──");
+                            Console.WriteLine("──▀████████▀──");
+                            Console.WriteLine("─────▀██▀─────");
+                            Console.WriteLine("──────────────");
+                        }
+                        break;
+                    case 3:
+                        break;
+                }
+                if(escolha == 3){
+                    break;
+                }
+            }
+            break;
+        case 2:
+            menu.MostrarPokemonsAdotados(pokemonsAdotados);
+            break;
+        case 3:
+            Console.WriteLine("Obrigado por jogar! Até a próxima!");
+            return;
     }
-}
-
-client = new RestClient($"https://pokeapi.co/api/v2/pokemon/{escolha}");
-request = new RestRequest("", Method.Get);
-response = client.Execute(request, Method.Get);
-
-if(response.StatusCode == System.Net.HttpStatusCode.OK){
-    Console.WriteLine(response.Content);
-}else{
-    Console.WriteLine(response.ErrorMessage);
 }
 
