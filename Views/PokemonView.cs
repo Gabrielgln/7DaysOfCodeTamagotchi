@@ -15,8 +15,9 @@ namespace Tamagotchi.Views
             Console.WriteLine("--------------------------- MENU ---------------------------");
             Console.WriteLine($"{Name} Você deseja:");
             Console.WriteLine("1. Adoção de pokemons");
-            Console.WriteLine("2. Ver pokemons adotados");
-            Console.WriteLine("3. Sair do Jogo");
+            Console.WriteLine("2. Interagir com seu Pokemon");
+            Console.WriteLine("3. Ver pokemons adotados");
+            Console.WriteLine("4. Sair do Jogo");
         }
         public void MostrarMenuDeAdocao(List<Pokemon> pokemons){
             Console.WriteLine("--------------------- ADOTAR UM POKEMON ---------------------");
@@ -32,6 +33,18 @@ namespace Tamagotchi.Views
             Console.WriteLine($"2. Adotar {pokemonName}");
             Console.WriteLine($"3. Voltar");
         }
+        public void MostrarMenuInteracao(PokemonDto pokemonDto)
+        {
+            Console.WriteLine("\n ──────────────");
+            Console.WriteLine("Menu de Interação:");
+            Console.WriteLine($"1. Saber como o {pokemonDto.Nome} está");
+            Console.WriteLine($"2. Alimentar o {pokemonDto.Nome}");
+            Console.WriteLine($"3. Brincar com o {pokemonDto.Nome}");
+            Console.WriteLine($"4. Colocar o {pokemonDto.Nome} para mimir");
+            Console.WriteLine($"5. Dar carinho ao {pokemonDto.Nome}");
+            Console.WriteLine("6. Voltar");
+            Console.Write("Escolha uma opção: ");
+        }
         public void MostrarDetalhesDaEspecie(PokemonDetail pokemonDetail){
             Console.WriteLine("Detalhes da Espécie:");
             Console.WriteLine($"Nome Pokemon: {pokemonDetail.Name}");
@@ -42,10 +55,10 @@ namespace Tamagotchi.Views
                 Console.WriteLine(abilityDetail.Ability.Name.ToUpper());
             }
         }
-        public int ObterEscolhaDoJogador(){
+        public int ObterEscolhaDoJogador(int maxOpcao){
             int escolha;
-            while(!int.TryParse(Console.ReadLine(), out escolha) || escolha < 1 || escolha > 3){
-                Console.Write("Escolha inválida. Por favor, escolha uma opção entre 1 e 3: ");
+            while(!int.TryParse(Console.ReadLine(), out escolha) || escolha < 1 || escolha > maxOpcao){
+                Console.Write($"Escolha inválida. Por favor, escolha uma opção entre 1 e {maxOpcao}: ");
             }
             return escolha;
         }
@@ -66,14 +79,14 @@ namespace Tamagotchi.Views
             string resposta = Console.ReadLine();
             return resposta.ToLower() == "s";
         }
-        public void MostrarPokemonsAdotados(List<PokemonDetail> pokemonsAdotados){
+        public void MostrarPokemonsAdotados(List<PokemonDto> pokemonsAdotados){
             Console.WriteLine("Pokemons Adotados:");
             if(pokemonsAdotados.Count == 0){
                 Console.WriteLine("Você ainda não adotou nenhum Pokemon.");
             }
             else{
                 for(int i = 0; i < pokemonsAdotados.Count; i++){
-                    Console.WriteLine($"{i+1}. {pokemonsAdotados[i].Name}");
+                    Console.WriteLine($"{i+1}. {pokemonsAdotados[i].Nome}");
                 }
             }
         }
