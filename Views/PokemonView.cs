@@ -1,8 +1,8 @@
-using TamagotchiApp.Models;
+using Tamagotchi.Models;
 
-namespace TamagotchiApp.Views
+namespace Tamagotchi.Views
 {
-    public class Menu
+    public class PokemonView
     {
         public string Name {get; set;} = string.Empty;
         public void MostrarMensagemDeBoasVindas(){
@@ -52,7 +52,7 @@ namespace TamagotchiApp.Views
         public int ObterEspecieEscolhida(List<Pokemon> pokemons){
             int escolha;
             while(true){
-                Console.Write("Escolha uma espécie entre os números 1 e "+pokemons.Count+":");
+                Console.Write("Escolha uma espécie entre os números 1 e "+pokemons.Count+": ");
                 if (int.TryParse(Console.ReadLine(), out escolha) && escolha >= 1 && escolha <= pokemons.Count)
                 {
                     break;

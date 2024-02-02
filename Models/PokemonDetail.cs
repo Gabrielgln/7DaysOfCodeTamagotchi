@@ -1,4 +1,4 @@
-namespace TamagotchiApp.Models
+namespace Tamagotchi.Models
 {
     public class PokemonDetail
     {

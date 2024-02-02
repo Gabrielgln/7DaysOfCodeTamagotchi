@@ -1,8 +1,8 @@
-using TamagotchiApp.Models;
+using Tamagotchi.Models;
 using Newtonsoft.Json;
 using RestSharp;
 
-namespace TamagotchiApp
+namespace Tamagotchi
 {
     public class PokemonApiService
     {
