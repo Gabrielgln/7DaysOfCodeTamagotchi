@@ -18,12 +18,13 @@ namespace Tamagotchi.Models
             Energia = random.Next(15);
             Saude = random.Next(15);
         }
-        public void AtualizarPokemon(PokemonDetail pokemonDetail){
-            Nome = pokemonDetail.Name;
-            Altura = pokemonDetail.Height;
-            Peso = pokemonDetail.Weight;
-            Habilidades = pokemonDetail.Abilities.Select(x => new Habilidade { Nome = x.Ability.Name}).ToList();
-        }
+        //public void AtualizarPokemon(PokemonDetail pokemonDetail)
+        //{
+        //    Nome = pokemonDetail.Name;
+        //    Altura = pokemonDetail.Height;
+        //    Peso = pokemonDetail.Weight;
+        //    Habilidades = pokemonDetail.Abilities.Select(x => new Habilidade { Nome = x.Ability.Name }).ToList();
+        //}
         public void Alimentar(){
             Alimentacao++;
             Energia--;
