@@ -1,5 +1,7 @@
 using Tamagotchi.Views;
 using Tamagotchi.Models;
+using AutoMapper;
+using Tamagotchi.Services;
 
 namespace Tamagotchi.Controllers
 {
@@ -9,8 +11,12 @@ namespace Tamagotchi.Controllers
         private PokemonApiService PokemonApiService { get; set; }
         private List<Pokemon> Pokemons { get; set; }
         private List<PokemonDto> PokemonsAdotados { get; set; }
+        IMapper mapper {get; set;}
 
         public PokemonController(){
+            var config = new MapperConfiguration(cfg => { cfg.AddProfile<AutoMapperProfile>(); });
+            mapper = config.CreateMapper();
+
             PokemonView = new PokemonView();
             PokemonApiService = new PokemonApiService();
             Pokemons = PokemonApiService.ObterEspeciesDisponiveis();
@@ -20,7 +26,7 @@ namespace Tamagotchi.Controllers
             PokemonView.MostrarMensagemDeBoasVindas();
             while(true){
                 PokemonView.MostrarMenuPrincipal();
-                int escolha = PokemonView.ObterEscolhaDoJogador(3);
+                int escolha = PokemonView.ObterEscolhaDoJogador(4);
                 switch(escolha){
                     case 1:
                         PokemonView.MostrarMenuDeAdocao(Pokemons);
@@ -36,8 +42,9 @@ namespace Tamagotchi.Controllers
                                 case 2:
                                     pokemonDetail = PokemonApiService.ObterDetalhesDaEspecie(Pokemons[indiceEspecie]);
                                     if(PokemonView.ConfirmarAdocao()){
-                                        var pokemonDto = new PokemonDto();
-                                        pokemonDto.AtualizarPokemon(pokemonDetail);
+                                        //var pokemonDto = new PokemonDto();
+                                        //pokemonDto.AtualizarPokemon(pokemonDetail);
+                                        PokemonDto pokemonDto = mapper.Map<PokemonDto>(pokemonDetail);
                                         PokemonsAdotados.Add(pokemonDto);
                                         Console.WriteLine($"{PokemonView.Name} Parabéns! Você adotou um {pokemonDetail.Name}!");
                                         Console.WriteLine("──────────────");
